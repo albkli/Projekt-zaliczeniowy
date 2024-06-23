@@ -30,12 +30,14 @@ picked_country.click()
 
 go_search = driver.find_element("xpath", "/html/body/div[7]/div/div[1]/div[2]/footer/button")
 go_search.click()
+driver.implicitly_wait(10)
 
-sort_option = driver.find_element("xpath", "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div/div[1]/span")
-sort_option.click()
+sorting_option = driver.find_element("xpath", "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div")
+sorting_option.click()
+driver.implicitly_wait(10)
 
-sort_option = driver.find_element("xpath", "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div/div[1]/span")
-sort_option.click()
+sorting_lowest_price = driver.find_element("xpath", "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]")
+sorting_lowest_price.click()
 
 time.sleep(500)
 # search_box = driver.find_element('id', "__next")
