@@ -8,7 +8,7 @@ def search_tours():
     country = entry.get()
     if country:
         driver = webdriver.Chrome()
-        driver.get('https://www.wakacje.pl/wczasy/?src=fromSearch')  # Zmień URL na rzeczywisty
+        driver.get('https://www.wakacje.pl/wczasy/?src=fromSearch')
 
         # Wyszukiwanie państwa (dostosuj do rzeczywistej strony)
         search_box = driver.find_element('id', "__next")
