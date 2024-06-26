@@ -11,20 +11,26 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 
-country = input("Jakie państwo?")
-
 # Konfiguracja Selenium z lokalnym chromedriver.exe
 driver = webdriver.Chrome()
 driver.get('https://www.wakacje.pl/wczasy/?src=fromSearch')
+
+# Ustawienia WebDriverWait
 wait = WebDriverWait(driver, 10)
-# Wyszukiwanie państwa
-accept = driver.find_element("xpath", "/html/body/div[3]/div/div[2]/div[3]/div/button[2]")
-accept.click()
+driver.implicitly_wait(10)
+
+# Akceptacja ciasteczek
+try:
+    accept = driver.find_element(By.XPATH, "/html/body/div[3]/div/div[2]/div[3]/div/button[2]")
+    accept.click()
+except NoSuchElementException:
+    True
+
 driver.implicitly_wait(10)
 
 search_place = driver.find_element("xpath", "//*[@id='__next']/div[2]/div[1]/main/div/div[1]/section/div/div/div/div[1]/div/div/div/input")
 search_place.click()
-driver.implicitly_wait(10)
+
 
 searchbox = driver.find_element(By.CLASS_NAME, "sc-hxqEdz")
 searchbox.send_keys(country)
@@ -33,20 +39,21 @@ time.sleep(1)
 picked_country = driver.find_element(By.CLASS_NAME, "sc-1slvi5p-2")
 picked_country.click()
 
-go_search = driver.find_element("xpath", "/html/body/div[7]/div/div[1]/div[2]/footer/button")
+time.sleep(1)
+go_search = wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[7]/div/div[1]/div[2]/footer/button")))
 go_search.click()
-driver.implicitly_wait(10)
 
+
+time.sleep(1)
 sorting_option = driver.find_element("xpath", "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div")
 sorting_option.click()
-driver.implicitly_wait(10)
+
 
 sorting_lowest_price = driver.find_element("xpath", "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]")
 sorting_lowest_price.click()
 
 
 try:
-    wait = WebDriverWait(driver, 10)
     place = wait.until(EC.presence_of_element_located((By.XPATH, "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[1]/span")))
     place = place.text
 
@@ -65,7 +72,7 @@ try:
     agency = wait.until(EC.presence_of_element_located((By.XPATH, "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[4]/span[2]")))
     agency = agency.text
 
-    price = wait.until((EC.presence_of_element_located((By.XPATH, "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[3]/div/div[2]/div/div/h4"))))
+    price = wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[2]/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[3]/div")))
     price = price.text
 
     place_list = place.split()
@@ -81,6 +88,5 @@ print("Wylot/dojazd własny:", acces)
 print("Wyżywienie:", food)
 print("Biuro podróży:", agency)
 
-print("Cena:",
-      price)
+print("Informacja cenowa:\n",price)
 time.sleep(500)
