@@ -133,6 +133,11 @@ def country_selected(country):
         results_window = tk.Toplevel()
         results_window.title("Wyniki wyszukiwania")
         results_window.geometry("600x400")
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        w = int(screen_width / 2 - window_width / 2)
+        h = int(screen_height / 2 - window_height / 2)
+        results_window.geometry(f'{window_width}x{window_height}+{w}+{h}')
 
         # Tworzymy etykiety na wyniki
         tk.Label(results_window, text=f'Miejsce:\n {place}').pack()
@@ -147,7 +152,7 @@ def country_selected(country):
         def go_back():
             results_window.destroy()
 
-        tk.Button(results_window, text="Powrót", command=go_back).pack()
+        tk.Button(results_window, text="Powrót do MENU", command=go_back).pack()
 
     except Exception as e:
         # Tworzymy okno Tkinter z komunikatem o błędzie

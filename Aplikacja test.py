@@ -1,12 +1,10 @@
 import tkinter as tk
 from tkinter import messagebox
-from tkinter import ttk
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-import threading
 import time
 
 # Lista krajów
@@ -34,36 +32,16 @@ countries = [
     "Zimbabwe"
 ]
 
-# Funkcja do tworzenia okna ładowania
-def create_loading_window():
-    loading_window = tk.Toplevel()
-    loading_window.title("Trwa wyszukiwanie")
-    loading_window.geometry("300x100")
-    loading_window.transient(root)  # Ustawienie, aby okno było modalne
-    loading_window.grab_set()  # Zablokowanie głównego okna
-
-    # Etykieta ładowania
-    label_loading = ttk.Label(loading_window, text="Trwa wyszukiwanie...")
-    label_loading.pack(pady=10)
-
-    # Animacja ładowania - można dodać np. kółko ładowania
-
-    return loading_window
 
 # Funkcja obsługująca kliknięcie przycisku kraju
 def country_selected(country):
     try:
-        # Tworzenie okna ładowania
-        loading_window = create_loading_window()
-
         # Konfiguracja Selenium z lokalnym chromedriver.exe
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')  # Ukrycie przeglądarki
-        driver = webdriver.Chrome(options=options)
+        driver = webdriver.Chrome()
         driver.get('https://www.wakacje.pl/wczasy/?src=fromSearch')
 
         # Ustawienia WebDriverWait
-        wait = WebDriverWait(driver, 20)  # Zwiększenie timeoutów
+        wait = WebDriverWait(driver, 10)
 
         # Akceptacja ciasteczek, jeśli istnieje
         try:
@@ -108,58 +86,60 @@ def country_selected(country):
             place = place.text
 
             hotel_name = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                                    "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[1]")))
+                                                                    "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[2]/div/h4")))
             hotel_name = hotel_name.text
 
             date = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                              "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/span")))
+                                                              "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[1]/span[2]")))
             date = date.text
 
             acces = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                               "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[2]/span")))
+                                                               "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[2]/span[2]")))
             acces = acces.text
 
             food = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                              "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[4]/span")))
+                                                              "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[3]/span[2]")))
             food = food.text
 
             agency = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                                "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[5]/span")))
+                                                                "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[4]/span[2]")))
             agency = agency.text
 
-            price = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                               "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[3]/div")))
+            price = wait.until(EC.presence_of_element_located(
+                (By.XPATH, "/html/body/div[2]/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[3]/div")))
             price = price.text
 
         except NoSuchElementException:
-            place = "Nie ustalono"
-            hotel_name = "Nie ustalono"
-            date = "Nie ustalono"
-            acces = "Nie ustalono"
-            food = "Nie ustalono"
-            agency = "Nie ustalono"
-            price = "Nie ustalono"
+            place = "Nieustalono"
+            hotel_name = "Nieustalono"
+            date = "Nieustalono"
+            acces = "Nieustalono"
+            food = "Nieustalono"
+            agency = "Nieustalono"
+            price = "Nieustalono"
         except TimeoutException:
-            place = "Nie ustalono"
-            hotel_name = "Nie ustalono"
-            date = "Nie ustalono"
-            acces = "Nie ustalono"
-            food = "Nie ustalono"
-            agency = "Nie ustalono"
-            price = "Nie ustalono"
+            place = "Nieustalono"
+            hotel_name = "Nieustalono"
+            date = "Nieustalono"
+            acces = "Nieustalono"
+            food = "Nieustalono"
+            agency = "Nieustalono"
+            price = "Nieustalono"
 
-        # Zamknięcie przeglądarki
+        # Zamykamy przeglądarkę
         driver.quit()
 
-        # Zamknięcie okna ładowania
-        loading_window.destroy()
-
-        # Utworzenie nowego okna Tkinter na wyniki
+        # Tworzymy nowe okno Tkinter na wyniki
         results_window = tk.Toplevel()
         results_window.title("Wyniki wyszukiwania")
         results_window.geometry("600x400")
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        w = int(screen_width / 2 - window_width / 2)
+        h = int(screen_height / 2 - window_height / 2)
+        results_window.geometry(f'{window_width}x{window_height}+{w}+{h}')
 
-        # Etykiety na wyniki
+        # Tworzymy etykiety na wyniki
         tk.Label(results_window, text=f'Miejsce:\n {place}').pack()
         tk.Label(results_window, text=f'Nazwa hotelu/Nazwa Wycieczki:\n {hotel_name}').pack()
         tk.Label(results_window, text=f'Data wyjazdu i powrotu:\n {date}').pack()
@@ -175,13 +155,13 @@ def country_selected(country):
         tk.Button(results_window, text="Powrót", command=go_back).pack()
 
     except Exception as e:
-        # Okno z komunikatem o błędzie
+        # Tworzymy okno Tkinter z komunikatem o błędzie
         error_window = tk.Toplevel()
         error_window.title("Błąd")
         error_window.geometry("400x200")
 
         # Komunikat o błędzie
-        tk.Label(error_window, text="Wystąpił błąd podczas wyszukiwania oferty. Spróbuj ponownie.").pack(pady=20)
+        tk.Label(error_window, text="Wystąpił błąd, spróbuj ponownie lub wybierz inny kraj").pack(pady=20)
 
         # Przycisk "Powrót"
         def go_back():
@@ -192,10 +172,6 @@ def country_selected(country):
         # Zamknięcie przeglądarki, jeśli została otwarta
         if 'driver' in locals() or 'driver' in globals():
             driver.quit()
-
-        # Zamknięcie okna ładowania
-        if loading_window:
-            loading_window.destroy()
 
 
 # Tworzenie interfejsu użytkownika Tkinter
@@ -214,7 +190,7 @@ message = tk.Label(root, text='Witaj Podróżniku!\nWybierz kraj, aby znaleźć 
                    wraplength=300)
 message.pack(pady=10)
 
-# Obszar przewijania
+# Tworzenie obszaru przewijania
 canvas = tk.Canvas(root)
 scrollbar = tk.Scrollbar(root, orient="vertical", command=canvas.yview)
 scrollable_frame = tk.Frame(canvas)
@@ -232,16 +208,15 @@ canvas.configure(yscrollcommand=scrollbar.set)
 canvas.pack(side="left", fill="both", expand=True)
 scrollbar.pack(side="right", fill="y")
 
-# Przyciski dla krajów
+# Tworzenie przycisków dla krajów
 columns = 4
 for index, country in enumerate(countries):
     row = index // columns
     column = index % columns
-    button = tk.Button(scrollable_frame, text=country,
-                       command=lambda c=country: threading.Thread(target=country_selected, args=(c,)).start())
+    button = tk.Button(scrollable_frame, text=country, command=lambda c=country: country_selected(c))
     button.grid(row=row, column=column, padx=5, pady=5, sticky='nsew')
 
-# Równomierne rozmieszczenie kolumn
+# Ustawienie równomiernego rozłożenia kolumn
 for i in range(columns):
     scrollable_frame.grid_columnconfigure(i, weight=1)
 
