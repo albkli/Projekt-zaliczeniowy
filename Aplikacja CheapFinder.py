@@ -180,7 +180,7 @@ def country_selected(country):
 root = tk.Tk()
 root.title('CheapFinder')
 window_width = 600
-window_height = 800
+window_height = 700
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 w = int(screen_width / 2 - window_width / 2)
