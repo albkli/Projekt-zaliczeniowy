@@ -8,7 +8,7 @@ import time
 
 # Lista krajów dostępna w serwisie internetowym
 countries = [
-    "XXXFDS", "Algieria", "Andora", "Anguilla", "Antarktyda", "Antyle Holenderskie",
+    "Albania", "Algieria", "Andora", "Anguilla", "Antarktyda", "Antyle Holenderskie",
     "Arabia Saudyjska", "Argentyna", "Armenia", "Aruba", "Australia", "Austria",
     "Azerbejdżan", "Bahamy", "Bahrajn", "Bangladesz", "Barbados", "Belgia",
     "Belize", "Birma", "Boliwia", "Bośnia i Hercegowina", "Botswana", "Brazylia",
