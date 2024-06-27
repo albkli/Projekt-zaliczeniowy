@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import messagebox
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 import time
 
-# Lista krajów
+# Lista krajów dostępna w serwisie internetowym
 countries = [
     "Albania", "Algieria", "Andora", "Anguilla", "Antarktyda", "Antyle Holenderskie",
     "Arabia Saudyjska", "Argentyna", "Armenia", "Aruba", "Australia", "Austria",
@@ -52,9 +51,11 @@ def country_selected(country):
 
         # Znalezienie pola wyszukiwania i wysłanie nazwy kraju
         search_place = driver.find_element(By.XPATH,
-                                           "//*[@id='__next']/div[2]/div[1]/main/div/div[1]/section/div/div/div/div[1]/div/div/div/input")
+        "//*[@id='__next']/div[2]/div[1]/main/div/div[1]/section/div/div/div/div[1]/div/div/div/input")
+
         search_place.click()
         time.sleep(1)
+
         searchbox = driver.find_element(By.CLASS_NAME, "sc-hxqEdz")
         searchbox.send_keys(country)
         time.sleep(2)
@@ -72,41 +73,42 @@ def country_selected(country):
         time.sleep(1)
         # Wybór opcji sortowania (najniższa cena)
         sorting_option = driver.find_element(By.XPATH,
-                                             "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div")
+        "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div")
+
         sorting_option.click()
 
         sorting_lowest_price = driver.find_element(By.XPATH,
-                                                   "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]")
+        "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]")
         sorting_lowest_price.click()
 
         # Pobranie informacji o pierwszej ofercie
         try:
             place = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                               "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[1]/span")))
+            "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[1]/span")))
             place = place.text
 
             hotel_name = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                                    "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[2]/div/h4")))
+            "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[2]/div/h4")))
             hotel_name = hotel_name.text
 
             date = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                              "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[1]/span[2]")))
+            "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[1]/span[2]")))
             date = date.text
 
             acces = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                               "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[2]/span[2]")))
+            "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[2]/span[2]")))
             acces = acces.text
 
             food = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                              "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[3]/span[2]")))
+            "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[3]/span[2]")))
             food = food.text
 
             agency = wait.until(EC.presence_of_element_located((By.XPATH,
-                                                                "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[4]/span[2]")))
+            "//*[@id='__next']/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[2]/div/div[3]/div[4]/span[2]")))
             agency = agency.text
 
-            price = wait.until(EC.presence_of_element_located(
-                (By.XPATH, "/html/body/div[2]/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[3]/div")))
+            price = wait.until(EC.presence_of_element_located((By.XPATH,
+            "/html/body/div[2]/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[3]/div")))
             price = price.text
 
         except NoSuchElementException:
@@ -129,7 +131,7 @@ def country_selected(country):
         # Zamykamy przeglądarkę
         driver.quit()
 
-        # Tworzymy nowe okno Tkinter na wyniki
+        # Utworzenie okna na potrzeby wyświetlania wyników
         results_window = tk.Toplevel()
         results_window.title("Wyniki wyszukiwania")
         results_window.geometry("600x400")
@@ -139,12 +141,12 @@ def country_selected(country):
         h = int(screen_height / 2 - window_height / 2)
         results_window.geometry(f'{window_width}x{window_height}+{w}+{h}')
 
-        # Tworzymy etykiety na wyniki
+        # Utworzenie etykiet na wyniki
         tk.Label(results_window, text=f'Miejsce:\n {place}').pack()
         tk.Label(results_window, text=f'Nazwa hotelu/Nazwa Wycieczki:\n {hotel_name}').pack()
         tk.Label(results_window, text=f'Data wyjazdu i powrotu:\n {date}').pack()
         tk.Label(results_window, text=f'Miasto wylotu lub "dojazd własny":\n {acces}').pack()
-        tk.Label(results_window, text=f'Wyżywienie:\n {food}').pack()
+        tk.Label(results_window, text=f'Informacja o wyżywieniu:\n {food}').pack()
         tk.Label(results_window, text=f'Biuro podróży:\n {agency}').pack()
         tk.Label(results_window, text=f'Uzyskane informacje o ofercie:\n{price}').pack()
 
@@ -155,7 +157,7 @@ def country_selected(country):
         tk.Button(results_window, text="Powrót do MENU", command=go_back).pack()
 
     except Exception as e:
-        # Tworzymy okno Tkinter z komunikatem o błędzie
+        # Utworzenie okna z komunikatem o błędzie
         error_window = tk.Toplevel()
         error_window.title("Błąd")
         error_window.geometry("400x200")
@@ -174,9 +176,9 @@ def country_selected(country):
             driver.quit()
 
 
-# Tworzenie interfejsu użytkownika Tkinter
+# Tworzenie interfejsu użytkownika
 root = tk.Tk()
-root.title('VacationFinder')
+root.title('CheapFinder')
 window_width = 600
 window_height = 800
 screen_width = root.winfo_screenwidth()
