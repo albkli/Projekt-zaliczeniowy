@@ -8,7 +8,7 @@ import time
 
 # Lista krajów dostępna w serwisie internetowym
 countries = [
-    "Albania", "Algieria", "Andora", "Anguilla", "Antarktyda", "Antyle Holenderskie",
+    "XXXFDS", "Algieria", "Andora", "Anguilla", "Antarktyda", "Antyle Holenderskie",
     "Arabia Saudyjska", "Argentyna", "Armenia", "Aruba", "Australia", "Austria",
     "Azerbejdżan", "Bahamy", "Bahrajn", "Bangladesz", "Barbados", "Belgia",
     "Belize", "Birma", "Boliwia", "Bośnia i Hercegowina", "Botswana", "Brazylia",
@@ -111,6 +111,9 @@ def country_selected(country):
             "/html/body/div[2]/div[2]/div[1]/main/div/div[2]/div[1]/section/div[1]/a[1]/div[3]/div")))
             price = price.text
 
+        # Obsługa wyjątków w sytuacji, gdy oferta nie będzie posiadała wszystkich
+        # przewidzianych elementów wymaganych do wyświetlenia wyników
+
         except NoSuchElementException:
             place = "Nieustalono"
             hotel_name = "Nieustalono"
@@ -134,7 +137,6 @@ def country_selected(country):
         # Utworzenie okna na potrzeby wyświetlania wyników
         results_window = tk.Toplevel()
         results_window.title("Wyniki wyszukiwania")
-        results_window.geometry("600x400")
         screen_width = root.winfo_screenwidth()
         screen_height = root.winfo_screenheight()
         w = int(screen_width / 2 - window_width / 2)
@@ -156,11 +158,17 @@ def country_selected(country):
 
         tk.Button(results_window, text="Powrót do MENU", command=go_back).pack()
 
-    except Exception as e:
+    except:
         # Utworzenie okna z komunikatem o błędzie
         error_window = tk.Toplevel()
         error_window.title("Błąd")
-        error_window.geometry("400x200")
+        error_width = 400
+        error_height = 150
+        screen_width = error_window.winfo_screenwidth()
+        screen_height = error_window.winfo_screenheight()
+        w = int(screen_width / 2 - error_width / 2)
+        h = int(screen_height / 2 - error_height / 2)
+        error_window.geometry(f'{error_width}x{error_height}+{w}+{h}')
 
         # Komunikat o błędzie
         tk.Label(error_window, text="Wystąpił błąd, spróbuj ponownie lub wybierz inny kraj").pack(pady=20)
